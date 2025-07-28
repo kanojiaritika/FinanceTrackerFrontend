@@ -3,6 +3,8 @@
 
 ---
 
+##🔗 [Live Demo](https://kanojiaritika.github.io/FinanceTrackerFrontend/)
+
 ## 📷 Screenshots
 
 <img width="1895" height="858" alt="image" src="https://github.com/user-attachments/assets/738b0ed2-cd40-428e-9c67-9e57d676cc6b" />
