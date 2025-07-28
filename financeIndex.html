@@ -1,0 +1,340 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="financeStyle.css" />
+    <link
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"
+      rel="stylesheet"
+    />
+    <title>FinanceFlow - Personal Finance Tracker</title>
+  </head>
+  <body>
+    <!-- Header -->
+    <header class="header">
+      <div class="container">
+        <div class="logo">
+          <i class="fas fa-chart-line"></i>
+          <span>FinanceFlow</span>
+        </div>
+        <div class="header-stats">
+          <div class="stat-item">
+            <span class="stat-label">Total Balance</span>
+            <span class="stat-value" id="header-balance">₹0</span>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="main-content">
+      <div class="container">
+        <!-- Dashboard Overview -->
+        <section class="dashboard-overview">
+          <div class="overview-cards">
+            <div class="overview-card income-card">
+              <div class="card-icon">
+                <i class="fas fa-arrow-up"></i>
+              </div>
+              <div class="card-content">
+                <h3>Total Income</h3>
+                <p class="amount" id="total-income">₹0</p>
+                <span class="change positive" id="income-change"
+                  >+0% this month</span
+                >
+              </div>
+            </div>
+
+            <div class="overview-card expense-card">
+              <div class="card-icon">
+                <i class="fas fa-arrow-down"></i>
+              </div>
+              <div class="card-content">
+                <h3>Total Expenses</h3>
+                <p class="amount" id="total-expenses">₹0</p>
+                <span class="change negative" id="expense-change"
+                  >+0% this month</span
+                >
+              </div>
+            </div>
+
+            <div class="overview-card balance-card">
+              <div class="card-icon">
+                <i class="fas fa-wallet"></i>
+              </div>
+              <div class="card-content">
+                <h3>Current Balance</h3>
+                <p class="amount" id="current-balance">₹0</p>
+                <span class="change" id="balance-change">0% change</span>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- Main Dashboard -->
+        <div class="dashboard-grid">
+          <!-- Transaction Form -->
+          <section class="form-section">
+            <div class="section-header">
+              <h2><i class="fas fa-plus-circle"></i> Add New Transaction</h2>
+            </div>
+            <form id="form" class="transaction-form">
+              <div class="form-row">
+                <div class="form-group">
+                  <label for="amount"
+                    ><i class="fas fa-rupee-sign"></i> Amount</label
+                  >
+                  <input
+                    type="number"
+                    placeholder="Enter amount"
+                    id="amount"
+                    step="0.01"
+                  />
+                  <span id="amount-error" class="error"></span>
+                </div>
+                <div class="form-group">
+                  <label for="type"
+                    ><i class="fas fa-exchange-alt"></i> Type</label
+                  >
+                  <select id="type">
+                    <option value="income">💰 Income</option>
+                    <option value="expense">💸 Expense</option>
+                  </select>
+                </div>
+              </div>
+
+              <div class="form-row">
+                <div class="form-group">
+                  <label for="category"
+                    ><i class="fas fa-tags"></i> Category</label
+                  >
+                  <input
+                    type="text"
+                    placeholder="e.g., Food, Salary, Transport"
+                    id="category"
+                    list="category-suggestions"
+                  />
+                  <datalist id="category-suggestions">
+                    <option value="Salary"></option>
+                    <option value="Food"></option>
+                    <option value="Transport"></option>
+                    <option value="Entertainment"></option>
+                    <option value="Shopping"></option>
+                    <option value="Bills"></option>
+                    <option value="Healthcare"></option>
+                    <option value="Education"></option>
+                  </datalist>
+
+                  <span id="category-error" class="error"></span>
+                </div>
+                <div class="form-group">
+                  <label for="date"><i class="fas fa-calendar"></i> Date</label>
+                  <input type="date" id="date" />
+                  <span id="date-error" class="error"></span>
+                </div>
+              </div>
+
+              <div class="form-group">
+                <label for="desc"
+                  ><i class="fas fa-comment"></i> Description (Optional)</label
+                >
+                <input
+                  type="text"
+                  placeholder="Add a note about this transaction"
+                  id="desc"
+                />
+              </div>
+
+              <button type="submit" class="btn-primary" id="addTransactionBtn">
+                <i class="fas fa-plus"></i> Add Transaction
+              </button>
+            </form>
+          </section>
+
+          <!-- Charts Section -->
+          <section class="charts-section">
+            <div class="section-header">
+              <h2><i class="fas fa-chart-pie"></i> Financial Overview</h2>
+            </div>
+
+            <div class="charts-grid">
+              <div class="chart-card">
+                <div class="chart-header">
+                  <h3>
+                    <i class="fas fa-arrow-up text-green"></i> Income Breakdown
+                  </h3>
+                </div>
+                <div class="chart-container">
+                  <canvas id="income"></canvas>
+                  <div class="chart-empty" id="income-empty">
+                    <i class="fas fa-chart-pie"></i>
+                    <p>No income data yet</p>
+                  </div>
+                </div>
+              </div>
+
+              <div class="chart-card">
+                <div class="chart-header">
+                  <h3>
+                    <i class="fas fa-arrow-down text-red"></i> Expense Breakdown
+                  </h3>
+                </div>
+                <div class="chart-container">
+                  <canvas id="expense"></canvas>
+                  <div class="chart-empty" id="expense-empty">
+                    <i class="fas fa-chart-pie"></i>
+                    <p>No expense data yet</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </section>
+        </div>
+
+        <!-- Transactions Section -->
+        <section class="transactions-section">
+          <div class="section-header">
+            <h2><i class="fas fa-history"></i> Transaction History</h2>
+            <div class="header-actions">
+              <button class="btn-secondary" id="export-btn">
+                <i class="fas fa-download"></i> Export
+              </button>
+              <button class="btn-secondary" id="clear-all-btn">
+                <i class="fas fa-trash"></i> Clear All
+              </button>
+            </div>
+          </div>
+
+          <div class="filters-container">
+            <div class="filter-group">
+              <label for="filter-date"
+                ><i class="fas fa-calendar"></i> Filter by Date</label
+              >
+              <input type="date" id="filter-date" />
+            </div>
+            <div class="filter-group">
+              <label for="filter-duration"
+                ><i class="fas fa-clock"></i> Quick Filter</label
+              >
+              <select id="filter-duration">
+                <option value="">All Time</option>
+                <option value="today">Today</option>
+                <option value="7days">Last 7 Days</option>
+                <option value="30days">Last 30 Days</option>
+                <option value="3months">Last 3 Months</option>
+              </select>
+            </div>
+            <div class="filter-group">
+              <label for="filter-type"
+                ><i class="fas fa-filter"></i> Filter by Type</label
+              >
+              <select id="filter-type">
+                <option value="">All Types</option>
+                <option value="income">Income Only</option>
+                <option value="expense">Expense Only</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="table-container">
+            <table class="transactions-table">
+              <thead>
+                <tr>
+                  <th><i class="fas fa-exchange-alt"></i> Type</th>
+                  <th><i class="fas fa-tags"></i> Category</th>
+                  <th><i class="fas fa-comment"></i> Description</th>
+                  <th><i class="fas fa-rupee-sign"></i> Amount</th>
+                  <th><i class="fas fa-calendar"></i> Date</th>
+                  <th><i class="fas fa-wallet"></i> Balance</th>
+                  <th><i class="fas fa-cog"></i> Actions</th>
+                </tr>
+              </thead>
+              <tbody id="transactions-body">
+                <tr class="no-data">
+                  <td colspan="7">
+                    <div class="no-data-message">
+                      <i class="fas fa-inbox"></i>
+                      <p>
+                        No transactions yet. Add your first transaction above!
+                      </p>
+                    </div>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </section>
+
+        <!-- Advanced Analytics -->
+        <section class="analytics-section">
+          <div class="section-header">
+            <h2><i class="fas fa-chart-line"></i> Advanced Analytics</h2>
+            <div class="month-selector">
+              <label for="monthSelect"
+                ><i class="fas fa-calendar-alt"></i> Select Month:</label
+              >
+              <input type="month" id="monthSelect" />
+            </div>
+          </div>
+
+          <div class="analytics-grid">
+            <div class="chart-card large">
+              <div class="chart-header">
+                <h3><i class="fas fa-line-chart"></i> Balance Trend</h3>
+              </div>
+              <div class="chart-container">
+                <canvas id="balanceLineChart"></canvas>
+                <div class="chart-empty" id="balance-empty">
+                  <i class="fas fa-chart-line"></i>
+                  <p>Select a month to view balance trends</p>
+                </div>
+              </div>
+            </div>
+
+            <div class="chart-card">
+              <div class="chart-header">
+                <h3><i class="fas fa-chart-bar"></i> Spending by Category</h3>
+              </div>
+              <div class="chart-container">
+                <canvas id="barChart"></canvas>
+                <div class="chart-empty" id="category-empty">
+                  <i class="fas fa-chart-bar"></i>
+                  <p>Select a month to view category breakdown</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+      </div>
+    </main>
+
+    <!-- Success Toast -->
+    <div class="toast" id="toast">
+      <i class="fas fa-check-circle"></i>
+      <span id="toast-message">Transaction added successfully!</span>
+    </div>
+
+    <!-- Confirmation Modal -->
+    <div class="modal-overlay" id="modal-overlay">
+      <div class="modal">
+        <div class="modal-header">
+          <h3 id="modal-title">Confirm Action</h3>
+          <button class="modal-close" id="modal-close">
+            <i class="fas fa-times"></i>
+          </button>
+        </div>
+        <div class="modal-body">
+          <p id="modal-message">Are you sure you want to proceed?</p>
+        </div>
+        <div class="modal-footer">
+          <button class="btn-secondary" id="modal-cancel">Cancel</button>
+          <button class="btn-danger" id="modal-confirm">Confirm</button>
+        </div>
+      </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="financeScript.js"></script>
+  </body>
+</html>
